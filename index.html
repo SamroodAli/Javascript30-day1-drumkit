@@ -60,11 +60,31 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
-        window.addEventListener('keydown', (e) => {
+        //play sound function - e is event
+        function playSound(e) {
+            //to get the key to play the audio
             const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+            // trying to get the key element to add the playing class => yellow animation
+            const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
             if (!audio) return; //program wont run if audio returns null
+            // to restart the audio everytime the button is pressed/otherwise it will wait for the it to be finished before playing again creating a lag
+            audio.currentTime = 0;
+            //to play when pressed
             audio.play();
-        })
+            // for the nahice animation for the current playing key
+            key.classList.add('playing');
+        }
+        window.addEventListener('keydown', playSound);
+        //function for removing class
+        function playingClassRemover(event) {
+            if (event.propertyName != 'transform') return; // skip if it transitions are other than transforms
+            //to remove class
+            this.classList.remove('playing');
+        }
+        // to get all the keys to remove class playing
+        const keys = document.querySelectorAll('.key');
+
+        keys.forEach(key => key.addEventListener('transitionend', playingClassRemover));
     </script>
 
 
